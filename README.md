@@ -3,4 +3,7 @@ Youtube Summarizer Telegram Bot
 
 Run the summarizer from terminal
 
-`python agent.py --url="https://www.youtube.com/watch?v=7GmD_cCHfiE"`
+```python agent.py --url="https://www.youtube.com/watch?v=7GmD_cCHfiE"```
+
+Run the bot
+```python bot.py```
