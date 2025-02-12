@@ -5,7 +5,9 @@ import os
 from dotenv import load_dotenv
 import argparse
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 class YoutubeSummaryAgent:
 
@@ -32,15 +34,19 @@ class YoutubeSummaryAgent:
 
     def is_valid_youtube_url(self, url):
         import re
-        youtube_regex = re.compile(r'(https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/.+')
+
+        youtube_regex = re.compile(
+            r"(https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/.+"
+        )
         return youtube_regex.match(url)
+
 
 if __name__ == "__main__":
 
     logging.basicConfig(level=logging.INFO)
 
     load_dotenv()
-    
+
     parser = argparse.ArgumentParser(description="Youtube Summarizer")
     parser.add_argument("--url", type=str, help="youtube url")
     args = parser.parse_args()
