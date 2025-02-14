@@ -1,10 +1,11 @@
-from langchain_community.document_loaders import YoutubeLoader
-from langchain_ollama.llms import OllamaLLM
-from langchain.prompts import PromptTemplate
 import os
-from dotenv import load_dotenv
 import argparse
 import logging
+from langchain_ollama.llms import OllamaLLM
+from langchain_community.document_loaders import YoutubeLoader
+from langchain.prompts import PromptTemplate
+from dotenv import load_dotenv
+from deepseekparser import DeepSeekParser
 
 logger = logging.getLogger(__name__)
 
@@ -16,11 +17,12 @@ class YoutubeSummaryAgent:
         logger.info(f"{model_name} model is loaded")
         self.template = """
         As an expert copywriter, your job is to create a point wise summary of the following transcript in simple to understand language.
-        Your response should be only the summary.
+        Your response should be only the summary and it should not exceed 4096 characters.
         Transcript:{transcript}
         """
         self.prompt = PromptTemplate.from_template(self.template)
-        self.chain = self.prompt | self.model
+        self.output_parser = DeepSeekParser()
+        self.chain = self.prompt | self.model | self.output_parser
 
     def summarize(self, url):
         self.is_valid_youtube_url(url)
