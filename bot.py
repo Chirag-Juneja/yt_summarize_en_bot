@@ -7,7 +7,11 @@ from telegram.ext import (
     ContextTypes,
 )
 import os
+import logging
 from dotenv import load_dotenv
+from agent import YoutubeSummaryAgent
+
+logger = logging.getLogger(__name__)
 
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -34,20 +38,46 @@ LinkedIn: https://www.linkedin.com/in/chirag-juneja-45bab4a7/
     )
 
 
+async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message_type: str = update.message.chat.type
+    text: str = update.message.text
+
+    logger.info(text)
+    if message_type == "group":
+        pass
+    else:
+        response = agent.summarize(text)
+    await update.message.reply_text(response)
+
+
 async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print(f"Update {update} caused error {context.error}")
+    logger.error(f"Update {update} caused error {context.error}")
 
 
 if __name__ == "__main__":
+
+    logging.basicConfig(level=logging.INFO)
+
     load_dotenv()
 
     TOKEN = os.getenv("TOKEN")
+    POLLING = int(os.getenv("POLLING"))
+
+    model_name = os.getenv("MODEL")
+    agent = YoutubeSummaryAgent(model_name=model_name)
+
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start_command))
     app.add_handler(CommandHandler("help", help_command))
     app.add_handler(CommandHandler("about", about_command))
 
+    app.add_handler(
+        MessageHandler(
+            filters.TEXT & filters.Entity("url") | filters.Entity("text_link"),
+            url_handler,
+        )
+    )
     app.add_error_handler(error)
-
-    app.run_polling(poll_interval=3)
+    logger.info(f"Starting telegram bot with {POLLING}sec polling")
+    app.run_polling(poll_interval=POLLING)
