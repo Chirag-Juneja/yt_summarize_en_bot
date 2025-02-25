@@ -9,7 +9,7 @@ from telegram.ext import (
 import os
 import logging
 from dotenv import load_dotenv
-from agent import YoutubeSummaryAgent
+from agent import Agent
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if message_type == "group":
         pass
     else:
-        response = agent.summarize(text)
+        response = agent(text)
     await update.message.reply_text(response)
 
 
@@ -64,7 +64,8 @@ if __name__ == "__main__":
     POLLING = int(os.getenv("POLLING"))
 
     model_name = os.getenv("MODEL")
-    agent = YoutubeSummaryAgent(model_name=model_name)
+
+    agent = Agent(model_name=model_name)
 
     app = Application.builder().token(TOKEN).build()
 
