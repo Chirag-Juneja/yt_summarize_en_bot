@@ -64,6 +64,7 @@ if __name__ == "__main__":
     POLLING = int(os.getenv("POLLING"))
 
     model_name = os.getenv("MODEL")
+
     agent = Agent(model_name=model_name)
 
     app = Application.builder().token(TOKEN).build()
