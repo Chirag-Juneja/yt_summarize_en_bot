@@ -23,8 +23,9 @@ This repository contains a **YouTube Summarization Telegram Bot** that extracts 
    git clone https://github.com/Chirag-Juneja/yt_summarize_en_bot.git
    cd yt_summarize_en_bot
    ```
+## 🏃 Usage
 
-**Run the summarizer from terminal**
+**Run script with a YouTube video URL**
 
    ```bash
    python agent.py --url="https://www.youtube.com/watch?v=7GmD_cCHfiE"
@@ -34,3 +35,5 @@ This repository contains a **YouTube Summarization Telegram Bot** that extracts 
    ```bash
    python bot.py
    ```
+## 📜 License
+This project is licensed under the MIT License.
